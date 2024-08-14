@@ -1,14 +1,15 @@
 import {
-  ResourceManagementClient,
   type GenericResourceExpanded,
+  ResourceManagementClient,
 } from "@azure/arm-resources";
 import { DefaultAzureCredential } from "@azure/identity";
+
 import { getSubscription } from "./getSubscription.js";
 
 export async function getBranchResources(args: {
-  subscriptionName: string;
-  resourceGroupName: string;
   branchName: string;
+  resourceGroupName: string;
+  subscriptionName: string;
 }): Promise<ResourceTypeAndName[]> {
   console.log(`
 Getting branch resources for:
@@ -23,7 +24,7 @@ Getting branch resources for:
     subscriptionName: args.subscriptionName,
   });
 
-  if (!subscription?.subscriptionId) {
+  if (!subscription.subscriptionId) {
     throw new Error(
       `Could not find subscription with name ${args.subscriptionName}`,
     );
@@ -38,6 +39,7 @@ Getting branch resources for:
     args.resourceGroupName,
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!resourceGroup) {
     throw new Error(
       `Could not find resource group with name ${args.resourceGroupName}`,
@@ -50,23 +52,20 @@ Getting branch resources for:
 
   const branchResourcesArray: GenericResourceExpanded[] = [];
   for await (const branchResource of branchResources) {
-    if (
-      branchResource.tags &&
-      branchResource.tags["Branch"]?.endsWith(args.branchName)
-    ) {
+    if (branchResource.tags?.Branch?.endsWith(args.branchName)) {
       branchResourcesArray.push(branchResource);
     }
   }
 
   const resourceTypeAndName = branchResourcesArray.map((branchResource) => ({
-    type: branchResource.type!,
-    name: branchResource.name!,
+    name: branchResource.name ?? "[NO NAME]",
+    type: branchResource.type ?? "[NO TYPE]",
   }));
 
   return resourceTypeAndName;
 }
 
 interface ResourceTypeAndName {
-  type: string;
   name: string;
+  type: string;
 }

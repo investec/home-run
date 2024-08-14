@@ -1,8 +1,9 @@
+import type { DefaultAzureCredential } from "@azure/identity";
+
 import {
   type Subscription,
   SubscriptionClient,
 } from "@azure/arm-subscriptions";
-import type { DefaultAzureCredential } from "@azure/identity";
 
 export async function getSubscription({
   credentials,

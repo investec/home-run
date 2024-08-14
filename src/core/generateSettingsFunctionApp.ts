@@ -1,16 +1,17 @@
-import { promises as fs } from "fs";
 import { DefaultAzureCredential } from "@azure/identity";
-import { functionAppAppSettingsProvider } from "./providers/functionAppAppSettingsProvider.js";
+import { promises as fs } from "fs";
+
 import { getSubscription } from "./getSubscription.js";
-import { keyVaultProvider } from "./providers/keyVaultProvider.js";
 import { makeNestedSettings } from "./nestedSettings.js";
+import { functionAppAppSettingsProvider } from "./providers/functionAppAppSettingsProvider.js";
+import { keyVaultProvider } from "./providers/keyVaultProvider.js";
 
 export async function generateSettingsFunctionApp(args: {
-  subscriptionName: string;
-  resourceGroupName: string;
   appLocation: string;
   functionAppName: string;
   keyVaultName: string | undefined;
+  resourceGroupName: string;
+  subscriptionName: string;
 }) {
   console.log(`
 Generating Function App settings for:
@@ -18,7 +19,7 @@ Generating Function App settings for:
 - Resource Group: ${args.resourceGroupName}
 - AppLocation: ${args.appLocation}
 - FunctionAppName: ${args.functionAppName}
-- KeyVaultName: ${args.keyVaultName}
+- KeyVaultName: ${args.keyVaultName ?? ""}
 `);
 
   const credentials = new DefaultAzureCredential();
@@ -28,9 +29,9 @@ Generating Function App settings for:
   });
 
   const appConfig = await functionAppAppSettingsProvider.getSettings({
+    credentials,
     functionAppName: args.functionAppName,
     resourceGroupName: args.resourceGroupName,
-    credentials,
     subscription,
   });
 
@@ -39,8 +40,8 @@ Generating Function App settings for:
 
   const keyVaultSettings = args.keyVaultName
     ? await keyVaultProvider.getSettings({
-        keyVaultName: args.keyVaultName,
         credentials,
+        keyVaultName: args.keyVaultName,
       })
     : {};
 
@@ -48,11 +49,11 @@ Generating Function App settings for:
   console.log();
 
   const appSettings = makeNestedSettings({
-    rawSettings: keyVaultSettings,
     delimiter: keyVaultProvider.nestingDelimiter,
+    rawSettings: keyVaultSettings,
     settings: makeNestedSettings({
-      rawSettings: appConfig,
       delimiter: functionAppAppSettingsProvider.nestingDelimiter,
+      rawSettings: appConfig,
       settings: {},
     }),
   });

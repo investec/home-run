@@ -21,9 +21,13 @@ async function getContainerAppEnvironmentVariables({
 }): Promise<Record<string, string>> {
   console.log(`Getting container app: ${containerAppName}`);
 
+  if (!subscription.subscriptionId) {
+    throw new Error("subscriptionId is undefined");
+  }
+
   const client = new ContainerAppsAPIClient(
     credentials,
-    subscription.subscriptionId!,
+    subscription.subscriptionId,
   );
 
   const app = await client.containerApps.get(
@@ -31,6 +35,7 @@ async function getContainerAppEnvironmentVariables({
     containerAppName,
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!app) {
     throw new Error(`Could not find app with name ${containerAppName}`);
   }

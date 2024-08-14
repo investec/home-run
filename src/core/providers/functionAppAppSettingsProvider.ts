@@ -18,13 +18,18 @@ async function getFunctionAppAppSettings({
 }): Promise<Record<string, string>> {
   console.log(`Getting function: ${functionAppName}`);
 
+  if (!subscription.subscriptionId) {
+    throw new Error("subscriptionId is undefined");
+  }
+
   const client = new WebSiteManagementClient(
     credentials,
-    subscription.subscriptionId!,
+    subscription.subscriptionId,
   );
 
   const app = await client.webApps.get(resourceGroupName, functionAppName);
 
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!app) {
     throw new Error(`Could not find app with name ${functionAppName}`);
   }
@@ -34,7 +39,7 @@ async function getFunctionAppAppSettings({
     functionAppName,
   );
 
-  if (!appSettings?.properties) {
+  if (!appSettings.properties) {
     throw new Error(
       `Could not find application settings with name ${functionAppName}`,
     );

@@ -1,16 +1,17 @@
-import { promises as fs } from "fs";
 import { DefaultAzureCredential } from "@azure/identity";
-import { keyVaultProvider } from "./providers/keyVaultProvider.js";
-import { containerAppEnvironmentVariablesProvider } from "./providers/containerAppEnvironmentVariablesProvider.js";
+import { promises as fs } from "fs";
+
 import { getSubscription } from "./getSubscription.js";
 import { makeNestedSettings } from "./nestedSettings.js";
+import { containerAppEnvironmentVariablesProvider } from "./providers/containerAppEnvironmentVariablesProvider.js";
+import { keyVaultProvider } from "./providers/keyVaultProvider.js";
 
 export async function generateSettingsContainerApp(args: {
-  subscriptionName: string;
-  resourceGroupName: string;
   appLocation: string;
   containerAppName: string;
   keyVaultName: string | undefined;
+  resourceGroupName: string;
+  subscriptionName: string;
 }) {
   console.log(`
 Generating Container App settings for:
@@ -18,7 +19,7 @@ Generating Container App settings for:
 - Resource Group: ${args.resourceGroupName}
 - AppLocation: ${args.appLocation}
 - ContainerAppName: ${args.containerAppName}
-- KeyVaultName: ${args.keyVaultName}
+- KeyVaultName: ${args.keyVaultName ?? ""}
 `);
 
   const credentials = new DefaultAzureCredential();
@@ -29,9 +30,9 @@ Generating Container App settings for:
 
   const environmentVariables =
     await containerAppEnvironmentVariablesProvider.getSettings({
-      resourceGroupName: args.resourceGroupName,
       containerAppName: args.containerAppName,
       credentials,
+      resourceGroupName: args.resourceGroupName,
       subscription,
     });
 
@@ -40,8 +41,8 @@ Generating Container App settings for:
 
   const keyVaultSettings = args.keyVaultName
     ? await keyVaultProvider.getSettings({
-        keyVaultName: args.keyVaultName,
         credentials,
+        keyVaultName: args.keyVaultName,
       })
     : {};
 
@@ -49,11 +50,11 @@ Generating Container App settings for:
   console.log();
 
   const appSettings = makeNestedSettings({
-    rawSettings: keyVaultSettings,
     delimiter: keyVaultProvider.nestingDelimiter,
+    rawSettings: keyVaultSettings,
     settings: makeNestedSettings({
-      rawSettings: environmentVariables,
       delimiter: containerAppEnvironmentVariablesProvider.nestingDelimiter,
+      rawSettings: environmentVariables,
       settings: {},
     }),
   });

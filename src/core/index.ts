@@ -110,6 +110,7 @@ async function getResourceNameAndKeyVaultResourceName({
   if (!name || !keyVaultName) {
     const git = simpleGit();
     const gitBranch = await git.branchLocal();
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const gitBranchName = branchName || gitBranch.current;
 
     const branchResources = await getBranchResources({
