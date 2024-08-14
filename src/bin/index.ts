@@ -7,7 +7,7 @@ import {
   generateSettingsContainerApp,
   generateSettingsFunctionApp,
   getResourceNameAndKeyVaultResourceName,
-} from "../core/index.js";
+} from "../index.js";
 // import { createRerunSuggestion } from "../create/createRerunSuggestion.js";
 import { logLine } from "../shared/cli/lines.js";
 import { StatusCodes } from "../shared/codes.js";
@@ -147,63 +147,18 @@ export async function bin(args: string[]) {
     resourceGroupName: values.resourceGroupName,
     subscriptionName: values.subscriptionName,
     type: values.type,
-    /*
-    access: values.access,
-    author: values.author,
-    auto: !!values.auto,
-    base: values.base,
-    bin: values.bin,
-    description: values.description,
-    directory: values.directory,
-    email:
-      (values.email ?? values["email-github"] ?? values["email-npm"])
-        ? {
-            github: values.email ?? values["email-github"],
-            npm: values.email ?? values["email-npm"],
-          }
-        : undefined,
-    excludeAllContributors: values["exclude-all-contributors"],
-    excludeCompliance: values["exclude-compliance"],
-    excludeLintESLint: values["exclude-lint-eslint"],
-    excludeLintJSDoc: values["exclude-lint-jsdoc"],
-    excludeLintJson: values["exclude-lint-json"],
-    excludeLintKnip: values["exclude-lint-knip"],
-    excludeLintMd: values["exclude-lint-md"],
-    excludeLintPackageJson: values["exclude-lint-package-json"],
-    excludeLintPackages: values["exclude-lint-packages"],
-    excludeLintPerfectionist: values["exclude-lint-perfectionist"],
-    excludeLintRegex: values["exclude-lint-regex"],
-    excludeLintSpelling: values["exclude-lint-spelling"],
-    excludeLintStrict: values["exclude-lint-strict"],
-    excludeLintYml: values["exclude-lint-yml"],
-    excludeReleases: values["exclude-releases"],
-    excludeRenovate: values["exclude-renovate"],
-    excludeTests: values["unit-tests"],
-    funding: values.funding,
-    guide: values.guide,
-    guideTitle: values["guide-title"],
-    logo: values.logo,
-    logoAlt: values["logo-alt"],
-    offline: values.offline,
-    owner: values.owner,
-    preserveGeneratedFrom:
-      values["preserve-generated-from"] ?? values.owner === "JoshuaKGoldberg",
-    repository: values.repository,
-    skipAllContributorsApi:
-      values["skip-all-contributors-api"] ?? values.offline,
-    skipGitHubApi: values["skip-github-api"] ?? values.offline,
-    skipInstall: values["skip-install"],
-    skipRemoval: values["skip-removal"],
-    skipRestore: values["skip-restore"],
-    skipUninstall: values["skip-uninstall"],
-    title: values.title,
-    */
   };
 
   const optionsParseResult = optionsSchema.safeParse(mappedOptions);
 
   if (!optionsParseResult.success) {
-    logLine(chalk.red(fromZodError(optionsParseResult.error)));
+    logLine(
+      chalk.red(
+        fromZodError(optionsParseResult.error, {
+          issueSeparator: "\n    - ",
+        }),
+      ),
+    );
     logLine();
 
     prompts.cancel(operationMessage("failed"));
