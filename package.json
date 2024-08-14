@@ -1,71 +1,86 @@
 {
-	"name": "home-run",
-	"version": "0.0.0",
-	"description": "Configure local development environments for Azure apps with one command",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/investec/home-run"
-	},
-	"license": "MIT",
-	"author": {
-		"email": "john.reilly@investec.com"
-	},
-	"type": "module",
-	"main": "./lib/index.js",
-	"bin": "./bin/index.js",
-	"files": [
-		"bin/index.js",
-		"lib/",
-		"package.json",
-		"LICENSE.md",
-		"README.md"
-	],
-	"scripts": {
-		"build": "tsup",
-		"format": "prettier .",
-		"lint": "eslint . --max-warnings 0",
-		"lint:packages": "pnpm dedupe --check",
-		"prepare": "husky",
-		"test": "vitest",
-		"tsc": "tsc"
-	},
-	"lint-staged": {
-		"*": "prettier --ignore-unknown --write"
-	},
-	"devDependencies": {
-		"@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
-		"@eslint/js": "^9.9.0",
-		"@release-it/conventional-changelog": "^8.0.1",
-		"@types/eslint-plugin-markdown": "^2.0.2",
-		"@types/eslint__js": "^8.42.3",
-		"@types/node": "^22.2.0",
-		"@vitest/coverage-v8": "^2.0.5",
-		"console-fail-test": "^0.4.4",
-		"eslint": "^9.9.0",
-		"eslint-plugin-jsdoc": "^50.1.0",
-		"eslint-plugin-n": "^17.10.2",
-		"eslint-plugin-package-json": "^0.15.2",
-		"eslint-plugin-perfectionist": "^3.1.3",
-		"eslint-plugin-regexp": "^2.6.0",
-		"eslint-plugin-vitest": "^0.5.4",
-		"husky": "^9.1.4",
-		"jsonc-eslint-parser": "^2.4.0",
-		"lint-staged": "^15.2.9",
-		"prettier": "^3.3.3",
-		"prettier-plugin-curly": "^0.2.2",
-		"prettier-plugin-packagejson": "^2.5.1",
-		"prettier-plugin-sh": "^0.14.0",
-		"release-it": "^17.6.0",
-		"tsup": "^8.2.4",
-		"typescript": "^5.5.4",
-		"typescript-eslint": "^8.1.0",
-		"vitest": "^2.0.5"
-	},
-	"packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e",
-	"engines": {
-		"node": ">=18.3.0"
-	},
-	"publishConfig": {
-		"provenance": true
-	}
+  "name": "@investec/home-run",
+  "version": "0.1.0",
+  "description": "Configure local development environments for Azure apps with one command",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/investec/home-run"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "John Reilly",
+    "email": "john.reilly@investec.com"
+  },
+  "type": "module",
+  "main": "./lib/index.js",
+  "bin": "./bin/index.js",
+  "files": [
+    "bin/index.js",
+    "lib/",
+    "package.json",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "format": "prettier .",
+    "lint": "eslint . --max-warnings 0",
+    "lint:packages": "pnpm dedupe --check",
+    "prepare": "husky",
+    "test": "vitest",
+    "tsc": "tsc"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
+  },
+  "dependencies": {
+    "@azure/arm-appcontainers": "^2.1.0",
+    "@azure/arm-appservice": "^15.0.0",
+    "@azure/arm-resources": "^5.2.0",
+    "@azure/arm-subscriptions": "^5.1.0",
+    "@azure/core-rest-pipeline": "^1.16.3",
+    "@azure/identity": "^4.4.1",
+    "@azure/keyvault-secrets": "^4.8.0",
+    "@clack/prompts": "^0.7.0",
+    "chalk": "^5.3.0",
+    "simple-git": "^3.25.0",
+    "zod": "^3.23.8",
+    "zod-validation-error": "^3.3.1"
+  },
+  "devDependencies": {
+    "@eslint-community/eslint-plugin-eslint-comments": "^4.3.0",
+    "@eslint/js": "^9.9.0",
+    "@release-it/conventional-changelog": "^8.0.1",
+    "@types/eslint-plugin-markdown": "^2.0.2",
+    "@types/eslint__js": "^8.42.3",
+    "@types/node": "^22.2.0",
+    "@vitest/coverage-v8": "^2.0.5",
+    "@vitest/eslint-plugin": "^1.0.1",
+    "console-fail-test": "^0.4.4",
+    "eslint": "^9.9.0",
+    "eslint-plugin-jsdoc": "^50.1.0",
+    "eslint-plugin-n": "^17.10.2",
+    "eslint-plugin-package-json": "^0.15.2",
+    "eslint-plugin-perfectionist": "^3.1.3",
+    "eslint-plugin-regexp": "^2.6.0",
+    "husky": "^9.1.4",
+    "jsonc-eslint-parser": "^2.4.0",
+    "lint-staged": "^15.2.9",
+    "prettier": "^3.3.3",
+    "prettier-plugin-curly": "^0.2.2",
+    "prettier-plugin-packagejson": "^2.5.1",
+    "prettier-plugin-sh": "^0.14.0",
+    "release-it": "^17.6.0",
+    "tsup": "^8.2.4",
+    "typescript": "^5.5.4",
+    "typescript-eslint": "^8.1.0",
+    "vitest": "^2.0.5"
+  },
+  "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e",
+  "engines": {
+    "node": ">=18.3.0"
+  },
+  "publishConfig": {
+    "provenance": true
+  }
 }
