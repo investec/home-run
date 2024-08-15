@@ -21,6 +21,7 @@ interface HelpTextSection {
 interface SubsectionFlag {
   description: string;
   flag: string;
+  short: string;
   type: string;
 }
 
@@ -38,11 +39,11 @@ function logHelpTextSection(section: HelpTextSection): void {
       console.log(chalk.green(subsection.subheading));
     }
 
-    for (const { description, flag, type } of subsection.flags) {
+    for (const { description, flag, short, type } of subsection.flags) {
       console.log(
         chalk.cyan(
           `
-  --${flag}${
+  -${short} | --${flag}${
     type !== "boolean" ? ` (${chalk.cyanBright(type)})` : ""
   }: ${description}`,
         ),
@@ -70,64 +71,21 @@ function createHelpTextSections(): HelpTextSection[] {
     ],
   };
 
-  const optOut: HelpTextSection = {
-    sectionHeading: "Opt-outs:",
-    subsections: [
-      {
-        flags: [],
-        warning: `
-  ⚠️ Warning: Specifying any --exclude-* flag on the command-line will 
-  cause the setup script to skip prompting for more excludes. ⚠️`,
-      },
-      {
-        flags: [
-          {
-            description: `Skips network calls that fetch all-contributors
-  data from GitHub`,
-            flag: "exclude-contributors",
-            type: "boolean",
-          },
-        ],
-        subheading: `
-You can prevent the migration script from making some network-based 
-changes using any or all of the following CLI flags:`,
-      },
-      {
-        flags: [],
-        subheading: `
-You can prevent the migration script from making some changes on disk 
-using any or all of the following CLI flags:`,
-      },
-    ],
-  };
-
-  const offline: HelpTextSection = {
-    sectionHeading: "Offline Mode:",
-    subsections: [
-      {
-        flags: [],
-      },
-    ],
-  };
-
   const subsections = {
     core: core.subsections[0],
-    offline: offline.subsections[0],
-    "opt-out": optOut.subsections[0],
     optional: optional.subsections[0],
-    "skip-disk": optOut.subsections[2],
-    "skip-net": optOut.subsections[1],
   };
 
   for (const [option, data] of Object.entries(allArgOptions)) {
     subsections[data.docsSection].flags.push({
       description: data.description,
       flag: option,
+      short: data.short,
       type: data.type,
     });
   }
 
-  return [core, optional, optOut, offline];
+  return [core, optional];
 }
 
 export function logHelpText(introLogs: string[]): void {
@@ -140,10 +98,7 @@ export function logHelpText(introLogs: string[]): void {
 
   console.log(
     chalk.cyan(
-      `
-A quickstart-friendly TypeScript template with comprehensive formatting, 
-linting, releases, testing, and other great tooling built-in.
-      `,
+      `Configure local development environments for Azure apps with one command`,
     ),
   );
 

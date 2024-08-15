@@ -19,6 +19,7 @@ import {
 import { logLine } from "../shared/cli/lines.js";
 import { withSpinner } from "../shared/cli/spinners.js";
 import { StatusCodes } from "../shared/codes.js";
+import { options } from "../shared/options/args.js";
 import { optionsSchema } from "../shared/options/optionsSchema.js";
 import { logHelpText } from "./help.js";
 import { getVersionFromPackageJson } from "./packageJson.js";
@@ -37,42 +38,7 @@ export async function bin(args: string[]) {
 
   const { values } = parseArgs({
     args,
-    options: {
-      appLocation: {
-        description: "The location of the app eg ../ZebraGptFunctionApp/",
-        short: "p",
-        type: "string",
-      },
-      branchName: { short: "b", type: "string" },
-      help: {
-        short: "h",
-        type: "boolean",
-      },
-      keyVaultName: { short: "k", type: "string" },
-      name: {
-        description: "The name of the app e.g. zebragpt",
-        short: "n",
-        type: "string",
-      },
-      resourceGroupName: {
-        description: "The name of the resource group",
-        short: "r",
-        type: "string",
-      },
-      subscriptionName: {
-        description: "The name of the subscription",
-        short: "s",
-        type: "string",
-      },
-      type: {
-        short: "t",
-        type: "string", // "functionapp" | "containerapp"
-      },
-      version: {
-        short: "v",
-        type: "boolean",
-      },
-    },
+    options,
     strict: false,
   });
 

@@ -5,9 +5,114 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
-import chalk from "chalk";
+export const options = {
+  appLocation: {
+    short: "l",
+    type: "string",
+  },
+  branchName: { short: "b", type: "string" },
+  help: {
+    short: "h",
+    type: "boolean",
+  },
+  keyVaultName: { short: "k", type: "string" },
+  name: {
+    short: "n",
+    type: "string",
+  },
+  resourceGroupName: {
+    short: "r",
+    type: "string",
+  },
+  subscriptionName: {
+    short: "s",
+    type: "string",
+  },
+  type: {
+    short: "t",
+    type: "string", // "functionapp" | "containerapp"
+  },
+  version: {
+    short: "v",
+    type: "boolean",
+  },
+} as const;
 
-export const allArgOptions = {
+export type ValidOption = keyof typeof options;
+
+export interface DocOption {
+  description: string;
+  docsSection: "core" | "optional";
+  multiple?: boolean;
+  short: string;
+  type: string;
+}
+
+// two modes: use resource group and subscription name to get branch resources, or pass explicit resource names
+
+export const allArgOptions: Record<ValidOption, DocOption> = {
+  appLocation: {
+    ...options.appLocation,
+    description:
+      "The location of the app, and the directory where the settings file will be generated eg ../ZebraGptFunctionApp/",
+    docsSection: "core",
+  },
+
+  branchName: {
+    ...options.branchName,
+    description:
+      "RESOURCE GROUP MODE: Allows users to supply an explicit branch name - if not supplied, the current branch will be used",
+    docsSection: "optional",
+  },
+
+  help: {
+    ...options.help,
+    description: "Show help",
+    docsSection: "core",
+    type: "boolean",
+  },
+
+  keyVaultName: {
+    ...options.keyVaultName,
+    description:
+      "Allows users to supply an explicit key vault name - if not supplied when in resource group mode, the key vault name will be inferred from the branch resources",
+    docsSection: "optional",
+  },
+
+  name: {
+    ...options.name,
+    description:
+      "The name of the explicit azure resource eg zebragpt (the type of resource is determined by the type option)",
+    docsSection: "core",
+  },
+
+  resourceGroupName: {
+    ...options.resourceGroupName,
+    description:
+      "RESOURCE GROUP MODE: The name of the resource group where the resources are located",
+    docsSection: "core",
+  },
+
+  subscriptionName: {
+    ...options.subscriptionName,
+    description: "The name of the subscription where the resources are located",
+    docsSection: "core",
+  },
+
+  type: {
+    ...options.type,
+    description:
+      "The type of resource to generate settings for - either functionapp or containerapp",
+    docsSection: "core",
+  },
+
+  version: {
+    ...options.version,
+    description: "Show version",
+    docsSection: "core",
+  },
+
+  /*
   access: {
     description: `(${chalk.cyanBright(
       '"public" | "restricted"',
@@ -315,4 +420,5 @@ export const allArgOptions = {
     docsSection: "core",
     type: "string",
   },
+  */
 } as const;

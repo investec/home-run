@@ -60,10 +60,12 @@ export default tseslint.config(
 
       // These on-by-default rules work well for this repo if configured
       "@typescript-eslint/no-unused-vars": ["error", { caughtErrors: "all" }],
+      "@typescript-eslint/prefer-reduce-type-parameter": "off",
       "n/no-unsupported-features/node-builtins": [
         "error",
         { allowExperimental: true },
       ],
+
       "perfectionist/sort-objects": [
         "error",
         {
