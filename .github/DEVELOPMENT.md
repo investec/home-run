@@ -1,5 +1,11 @@
 # Development
 
+To develop this project, you need to have the following tools installed:
+
+- Node.js
+- npm
+- pnpm
+
 After [forking the repo from GitHub](https://help.github.com/articles/fork-a-repo) and [installing pnpm](https://pnpm.io/installation):
 
 ```shell
@@ -10,6 +16,22 @@ pnpm install
 
 > This repository includes a list of suggested VS Code extensions.
 > It's a good idea to use [VS Code](https://code.visualstudio.com) and accept its suggestion to install them, as they'll help with development.
+
+## Running locally
+
+To test `npx` mode locally, run:
+
+```sh
+pnpm run build
+az login
+npx . --mode resourcegroup --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --appLocation ../../dev.azure.com/investec-cloud-experience/zebra-gpt/src/ZebraGptContainerApp
+```
+
+npx ../../../github.com/home-run --mode resourcegroup --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --appLocation ./src/ZebraGptContainerApp
+
+npx ../../../github.com/home-run --mode explicit --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --name ca-zebragpt-dev --appLocation ./src/ZebraGptContainerApp
+
+npm run dev -- --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type functionapp --name func-zebragpt-7l4a8lm8ra-dev --appLocation ../ZebraGptFunctionApp
 
 ## Building
 
