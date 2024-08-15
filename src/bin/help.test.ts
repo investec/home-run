@@ -52,11 +52,19 @@ describe("logHelpText", () => {
         ],
         [
           "
-        -n | --name (string): The name of the explicit azure resource eg zebragpt (the type of resource is determined by the type option)",
+        -k | --keyVaultName (string): [explicit]: Allows users to supply an explicit key vault name - if not supplied when in resource group mode, the key vault name will be inferred from the branch resources - required if mode is explicit",
         ],
         [
           "
-        -r | --resourceGroupName (string): RESOURCE GROUP MODE: The name of the resource group where the resources are located",
+        -m | --mode (string): explicit | resourcegroup - whether to pass explicit resource names, or look for resources in the resource group matching the branch name",
+        ],
+        [
+          "
+        -n | --name (string): The name of the explicit Azure resource eg zebragpt (the type of resource is determined by the type option) - required if mode is explicit",
+        ],
+        [
+          "
+        -r | --resourceGroupName (string): [resourcegroup]: The name of the resource group where the resources are located",
         ],
         [
           "
@@ -79,11 +87,7 @@ describe("logHelpText", () => {
         ],
         [
           "
-        -b | --branchName (string): RESOURCE GROUP MODE: Allows users to supply an explicit branch name - if not supplied, the current branch will be used",
-        ],
-        [
-          "
-        -k | --keyVaultName (string): Allows users to supply an explicit key vault name - if not supplied when in resource group mode, the key vault name will be inferred from the branch resources",
+        -b | --branchName (string): [resourcegroup]: Allows users to supply an explicit branch name - if not supplied, the current branch will be used",
         ],
         [],
       ]
