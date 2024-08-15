@@ -43,6 +43,19 @@ npx @investec/home-run --mode resourcegroup --subscriptionName our-subscription 
 
 Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with a `Branch` tag that matches the current git branch name. If it finds a match, it will configure the local development environment for that app.
 
+## Options
+
+- `-m` | `--mode` (`explicit | resourcegroup`): - whether to pass explicit resource names, or look for resources in the resource group matching the branch name
+- `-t` | `--type` (`functionapp | containerapp`): The type of resource to generate settings for
+- `-l` | `--appLocation` (`string`): The location of the app, and the directory where the settings file will be generated eg `./src/MyContainerApp`
+- `-s` | `--subscriptionName` (`string`): The name of the subscription where the resources are located eg `our-subscription`
+- `-r` | `--resourceGroupName` (`string`): The name of the resource group where the resources are located eg `rg-our-resource-group`
+- `-n` | `--name` (`string`): The explicit name of the Azure resource eg `ca-ourapp-dev` (the type of resource is determined by the type option) _required if mode is explicit_
+- `-k` | `--keyVaultName` (`string`): Allows users to supply an explicit key vault name - if not supplied when in resource group mode, the key vault name will be inferred from the branch resources _required if mode is explicit_
+- `-b` | `--branchName` (`string`): Allows users to supply an explicit branch name - if not supplied, the current git branch will be used
+- `-v` | `--version`: Show version
+- `-h` | `--help`: Show help
+
 ## Credits
 
 - This package was inspired by a [Jamie McCrindle](https://github.com/jamiemccrindle)'s prior art.
