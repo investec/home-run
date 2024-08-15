@@ -61,7 +61,7 @@ export async function generateSettingsContainerApp(args: {
   logAsJson(keyVaultSettings);
   logLine();
 
-  const appSettings = makeNestedSettings({
+  const settings = makeNestedSettings({
     delimiter: keyVaultProvider.nestingDelimiter,
     rawSettings: keyVaultSettings,
     settings: makeNestedSettings({
@@ -73,16 +73,13 @@ export async function generateSettingsContainerApp(args: {
 
   logLine();
   logLine(`${chalk.bold("generated configuration")}:`);
-  logAsJson(appSettings);
+  logAsJson(settings);
   logLine();
 
-  const appSettingsDevelopmentPath = `${args.appLocation}/appsettings.Development.json`;
+  const appSettingsPath = `${args.appLocation}/appsettings.Development.json`;
   logLine(
-    `Generating settings file at ${appSettingsDevelopmentPath} - DO NOT COMMIT THIS FILE IF IT CONTAINS SECRETS!`,
+    `Generating settings file at ${appSettingsPath} - DO NOT COMMIT THIS FILE IF IT CONTAINS SECRETS!`,
   );
 
-  await fs.writeFile(
-    appSettingsDevelopmentPath,
-    JSON.stringify(appSettings, null, 2),
-  );
+  await fs.writeFile(appSettingsPath, JSON.stringify(settings, null, 2));
 }
