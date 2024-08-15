@@ -15,6 +15,12 @@ import { getVersionFromPackageJson } from "./packageJson.js";
 const mockCancel = vi.fn();
 const mockOutro = vi.fn();
 
+vi.mock("../cli/spinners.ts", () => ({
+  withSpinner() {
+    return () => ({});
+  },
+}));
+
 vi.mock("@clack/prompts", () => ({
   get cancel() {
     return mockCancel;
@@ -26,6 +32,7 @@ vi.mock("@clack/prompts", () => ({
   get outro() {
     return mockOutro;
   },
+  spinner: vi.fn(),
 }));
 
 const mockLogLine = vi.fn();
