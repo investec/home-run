@@ -1,91 +1,20 @@
-import {
-  simpleGit,
-  // type SimpleGit, type CleanOptions
-} from "simple-git";
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
+import { simpleGit } from "simple-git";
 
 import { generateSettingsContainerApp } from "./generateSettingsContainerApp.js";
 import { generateSettingsFunctionApp } from "./generateSettingsFunctionApp.js";
 import { getBranchResources } from "./getBranchResources.js";
+import { logAsJson, logLine } from "./shared/cli/lines.js";
 
 // Useful links:
 // https://azure.github.io/azure-sdk/releases/latest/js.html
 // https://github.com/Azure/azure-sdk-for-js/blob/main/documentation/next-generation-quickstart.md#example-creating-a-resource-group
-
-/*
-const parser = yargs(process.argv.slice(2)).options({
-  subscriptionName: {
-    type: "string",
-    demandOption: true,
-    alias: "s",
-    description: "The name of the subscription",
-  },
-  resourceGroupName: {
-    type: "string",
-    demandOption: true,
-    alias: "rg",
-    description: "The name of the resource group",
-  },
-  appLocation: {
-    type: "string",
-    demandOption: true,
-    alias: "p",
-    description: "The location of the app eg ../ZebraGptFunctionApp/",
-  },
-  type: {
-    choices: ["functionapp", "containerapp"],
-    demandOption: true,
-    alias: "t",
-  },
-  name: {
-    type: "string",
-    demandOption: false,
-    alias: "n",
-    description: "The name of the app e.g. zebragpt",
-  },
-  keyVaultName: { type: "string", alias: "kv" },
-  branchName: { type: "string", alias: "b" },
-});
-
-(async () => {
-  const {
-    subscriptionName,
-    resourceGroupName,
-    type,
-    name,
-    appLocation,
-    keyVaultName,
-    branchName,
-  } = await parser.argv;
-
-  const { resourceName, keyVaultResourceName } =
-    await getResourceNameAndKeyVaultResourceName({
-      name,
-      keyVaultName,
-      subscriptionName,
-      resourceGroupName,
-      type,
-      branchName,
-    });
-
-  if (type === "functionapp") {
-    await generateSettingsFunctionApp({
-      subscriptionName,
-      resourceGroupName,
-      appLocation,
-      functionAppName: resourceName,
-      keyVaultName: keyVaultResourceName,
-    });
-  } else if (type === "containerapp") {
-    await generateSettingsContainerApp({
-      subscriptionName,
-      resourceGroupName,
-      appLocation,
-      containerAppName: resourceName,
-      keyVaultName: keyVaultResourceName,
-    });
-  }
-})();
-*/
 
 async function getResourceNameAndKeyVaultResourceName({
   branchName,
@@ -118,7 +47,9 @@ async function getResourceNameAndKeyVaultResourceName({
       resourceGroupName,
       subscriptionName,
     });
-    console.log(`Branch resources for ${gitBranchName}`, branchResources);
+    logLine();
+    logLine(`Branch resources for ${gitBranchName}`);
+    logAsJson(branchResources);
 
     if (type === "functionapp") {
       const functionAppResource = branchResources.find(

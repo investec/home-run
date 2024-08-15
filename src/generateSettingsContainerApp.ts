@@ -1,10 +1,19 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import { DefaultAzureCredential } from "@azure/identity";
+import chalk from "chalk";
 import { promises as fs } from "fs";
 
 import { getSubscription } from "./getSubscription.js";
 import { makeNestedSettings } from "./nestedSettings.js";
 import { containerAppEnvironmentVariablesProvider } from "./providers/containerAppEnvironmentVariablesProvider.js";
 import { keyVaultProvider } from "./providers/keyVaultProvider.js";
+import { logAsJson, logLine } from "./shared/cli/lines.js";
 
 export async function generateSettingsContainerApp(args: {
   appLocation: string;
@@ -13,14 +22,13 @@ export async function generateSettingsContainerApp(args: {
   resourceGroupName: string;
   subscriptionName: string;
 }) {
-  console.log(`
-Generating Container App settings for:
-- Subscription: ${args.subscriptionName}
-- Resource Group: ${args.resourceGroupName}
-- AppLocation: ${args.appLocation}
-- ContainerAppName: ${args.containerAppName}
-- KeyVaultName: ${args.keyVaultName ?? ""}
-`);
+  logLine(`Generating Container App settings for:`);
+  logLine(`- Subscription: ${args.subscriptionName}`);
+  logLine(`- Resource Group: ${args.resourceGroupName}`);
+  logLine(`- AppLocation: ${args.appLocation}`);
+  logLine(`- ContainerAppName: ${args.containerAppName}`);
+  logLine(`- KeyVaultName: ${args.keyVaultName ?? ""}`);
+  logLine();
 
   const credentials = new DefaultAzureCredential();
   const subscription = await getSubscription({
@@ -36,8 +44,10 @@ Generating Container App settings for:
       subscription,
     });
 
-  console.log("environmentVariables", environmentVariables);
-  console.log();
+  logLine();
+  logLine(`${chalk.bold("environmentVariables")}:`);
+  logAsJson(environmentVariables);
+  logLine();
 
   const keyVaultSettings = args.keyVaultName
     ? await keyVaultProvider.getSettings({
@@ -46,8 +56,10 @@ Generating Container App settings for:
       })
     : {};
 
-  console.log("keyVaultSettings", keyVaultSettings);
-  console.log();
+  logLine();
+  logLine(`${chalk.bold("keyVaultSettings")}:`);
+  logAsJson(keyVaultSettings);
+  logLine();
 
   const appSettings = makeNestedSettings({
     delimiter: keyVaultProvider.nestingDelimiter,
@@ -59,11 +71,15 @@ Generating Container App settings for:
     }),
   });
 
-  console.log("appSettings", appSettings);
-  console.log();
+  logLine();
+  logLine(`${chalk.bold("generated configuration")}:`);
+  logAsJson(appSettings);
+  logLine();
 
   const appSettingsDevelopmentPath = `${args.appLocation}/appsettings.Development.json`;
-  console.log(`Generating settings file at ${appSettingsDevelopmentPath}:`);
+  logLine(
+    `Generating settings file at ${appSettingsDevelopmentPath} - DO NOT COMMIT THIS FILE IF IT CONTAINS SECRETS!`,
+  );
 
   await fs.writeFile(
     appSettingsDevelopmentPath,

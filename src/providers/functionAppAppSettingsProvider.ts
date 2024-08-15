@@ -1,9 +1,18 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import type { Subscription } from "@azure/arm-subscriptions";
 import type { DefaultAzureCredential } from "@azure/identity";
 
 import { WebSiteManagementClient } from "@azure/arm-appservice";
 
 import type { SettingsProvider } from "../types.js";
+
+import { logLine } from "../shared/cli/lines.js";
 
 async function getFunctionAppAppSettings({
   credentials,
@@ -16,7 +25,7 @@ async function getFunctionAppAppSettings({
   resourceGroupName: string;
   subscription: Subscription;
 }): Promise<Record<string, string>> {
-  console.log(`Getting function: ${functionAppName}`);
+  logLine(`Getting function: ${functionAppName}`);
 
   if (!subscription.subscriptionId) {
     throw new Error("subscriptionId is undefined");

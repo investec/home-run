@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import * as prompts from "@clack/prompts";
 import chalk from "chalk";
 import { parseArgs } from "node:util";
@@ -10,6 +17,7 @@ import {
 } from "../index.js";
 // import { createRerunSuggestion } from "../create/createRerunSuggestion.js";
 import { logLine } from "../shared/cli/lines.js";
+import { withSpinner } from "../shared/cli/spinners.js";
 import { StatusCodes } from "../shared/codes.js";
 import { optionsSchema } from "../shared/options/optionsSchema.js";
 import { logHelpText } from "./help.js";
@@ -27,63 +35,9 @@ export async function bin(args: string[]) {
   const introPrompts = `${chalk.blueBright(`🏠🏃 Welcome to`)} ${chalk.bgBlueBright.black(`home-run`)} ${chalk.blueBright(`${version}! 🏠🏃`)}`;
   const outroPrompts = `${chalk.blueBright(`🏠🏃 Thanks for using`)} ${chalk.bgBlueBright.black(`home-run`)} ${chalk.blueBright(`${version}! 🏠🏃`)}`;
 
-  //   const introWarnings = [
-  //     chalk.yellow(
-  //       "⚠️ This template is early stage, opinionated, and not endorsed by the TypeScript team. ⚠️",
-  //     ),
-  //     chalk.yellow(
-  //       "⚠️ If any tooling it sets displeases you, you can always remove that portion manually. ⚠️",
-  //     ),
-  //   ];
-
-  /*
-{
-  subscriptionName: {
-    type: "string",
-    demandOption: true,
-    alias: "s",
-    description: "The name of the subscription",
-  },
-  resourceGroupName: {
-    type: "string",
-    demandOption: true,
-    alias: "rg",
-    description: "The name of the resource group",
-  },
-  appLocation: {
-    type: "string",
-    demandOption: true,
-    alias: "p",
-    description: "The location of the app eg ../ZebraGptFunctionApp/",
-  },
-  type: {
-    choices: ["functionapp", "containerapp"],
-    demandOption: true,
-    alias: "t",
-  },
-  name: {
-    type: "string",
-    demandOption: false,
-    alias: "n",
-    description: "The name of the app e.g. zebragpt",
-  },
-  keyVaultName: { type: "string", alias: "kv" },
-  branchName: { type: "string", alias: "b" },
-}
-     */
-
   const { values } = parseArgs({
     args,
     options: {
-      // help: {
-      //   short: "h",
-      //   type: "boolean",
-      // },
-      // mode: { type: "string" },
-      // version: {
-      //   short: "v",
-      //   type: "boolean",
-      // },
       appLocation: {
         description: "The location of the app eg ../ZebraGptFunctionApp/",
         short: "p",
@@ -123,10 +77,7 @@ export async function bin(args: string[]) {
   });
 
   if (values.help) {
-    logHelpText([
-      introPrompts,
-      // , ...introWarnings
-    ]);
+    logHelpText([introPrompts]);
     return StatusCodes.Success;
   }
 
@@ -177,36 +128,47 @@ export async function bin(args: string[]) {
     type,
   } = optionsParseResult.data;
 
-  const { keyVaultResourceName, resourceName } =
-    await getResourceNameAndKeyVaultResourceName({
-      branchName,
-      keyVaultName,
-      name,
-      resourceGroupName,
-      subscriptionName,
-      type,
-    });
+  const { keyVaultResourceName, resourceName } = await withSpinner(
+    `Getting resource name and key vault resource name`,
+    () =>
+      getResourceNameAndKeyVaultResourceName({
+        branchName,
+        keyVaultName,
+        name,
+        resourceGroupName,
+        subscriptionName,
+        type,
+      }),
+  );
 
   switch (type) {
     case "containerapp":
-      logLine(`Generating settings for container app: ${resourceName}`);
-      await generateSettingsContainerApp({
-        appLocation,
-        containerAppName: resourceName,
-        keyVaultName: keyVaultResourceName,
-        resourceGroupName,
-        subscriptionName,
-      });
+      // logLine(`Generating settings for container app: ${resourceName}`);
+      await withSpinner(
+        `Generating settings for container app: ${resourceName}`,
+        () =>
+          generateSettingsContainerApp({
+            appLocation,
+            containerAppName: resourceName,
+            keyVaultName: keyVaultResourceName,
+            resourceGroupName,
+            subscriptionName,
+          }),
+      );
       break;
     case "functionapp":
-      logLine(`Generating settings for function app: ${resourceName}`);
-      await generateSettingsFunctionApp({
-        appLocation,
-        functionAppName: resourceName,
-        keyVaultName: keyVaultResourceName,
-        resourceGroupName,
-        subscriptionName,
-      });
+      // logLine(`Generating settings for function app: ${resourceName}`);
+      await withSpinner(
+        `Generating settings for function app: ${resourceName}`,
+        () =>
+          generateSettingsFunctionApp({
+            appLocation,
+            functionAppName: resourceName,
+            keyVaultName: keyVaultResourceName,
+            resourceGroupName,
+            subscriptionName,
+          }),
+      );
       break;
   }
 

@@ -1,9 +1,18 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import type { Subscription } from "@azure/arm-subscriptions";
 import type { DefaultAzureCredential } from "@azure/identity";
 
 import { ContainerAppsAPIClient } from "@azure/arm-appcontainers";
 
 import type { SettingsProvider } from "../types.js";
+
+import { logLine } from "../shared/cli/lines.js";
 
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0
 // The : separator doesn't work with environment variable hierarchical keys on all platforms. __, the double underscore, is
@@ -19,7 +28,8 @@ async function getContainerAppEnvironmentVariables({
   resourceGroupName: string;
   subscription: Subscription;
 }): Promise<Record<string, string>> {
-  console.log(`Getting container app: ${containerAppName}`);
+  logLine();
+  logLine(`Getting container app: ${containerAppName}`);
 
   if (!subscription.subscriptionId) {
     throw new Error("subscriptionId is undefined");

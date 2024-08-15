@@ -1,30 +1,17 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import type { DefaultAzureCredential } from "@azure/identity";
 
-// import {
-//   createDefaultHttpClient,
-//   type HttpClient,
-// } from "@azure/core-rest-pipeline";
 import { SecretClient } from "@azure/keyvault-secrets";
-// import crypto from "crypto";
-// import https from "https";
 
 import type { SettingsProvider } from "../types.js";
 
-// const httpClient = createDefaultHttpClient();
-// const sslLegacyAgent = new https.Agent({
-//   // for self signed you could also add
-//   // rejectUnauthorized: false,
-//   // allow legacy server
-//   secureOptions: crypto.constants.SSL_OP_LEGACY_SERVER_CONNECT,
-// });
-// const customHttpClient: HttpClient = {
-//   sendRequest: async (request) => {
-//     // request.tlsSettings = { allowUntrustedCertificate: true };
-//     request.agent = sslLegacyAgent;
-//     const response = await httpClient.sendRequest(request);
-//     return response;
-//   },
-// };
+import { logLine } from "../shared/cli/lines.js";
 
 // https://learn.microsoft.com/en-us/aspnet/core/security/key-vault-configuration?view=aspnetcore-6.0#secret-storage-in-the-production-environment-with-azure-key-vault
 // Azure Key Vault secret names are limited to alphanumeric characters and dashes. Hierarchical values (configuration sections) use -- (two dashes) as a delimiter, as colons aren't allowed in key vault secret names. Colons delimit a section from a subkey in ASP.NET Core configuration. The two-dash sequence is replaced with a colon when the secrets are loaded into the app's configuration.
@@ -40,11 +27,9 @@ async function getKeyVaultSettings({
 
   const KEYVAULT_URI = `https://${keyVaultName}.vault.azure.net/`;
 
-  console.log(`Getting key vault: ${KEYVAULT_URI}`);
+  logLine(`Getting key vault: ${KEYVAULT_URI}`);
 
-  const secretClient = new SecretClient(KEYVAULT_URI, credentials, {
-    // httpClient: customHttpClient, // only necessary if being SSL intercepted by Palo Alto
-  });
+  const secretClient = new SecretClient(KEYVAULT_URI, credentials, {});
 
   for await (const secretProperties of secretClient.listPropertiesOfSecrets()) {
     // It will error if you encounter legacy TLS or if you

@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) Investec
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE.md file in the root directory of this source tree.
+ */
+
 import {
   type GenericResourceExpanded,
   ResourceManagementClient,
@@ -5,18 +12,18 @@ import {
 import { DefaultAzureCredential } from "@azure/identity";
 
 import { getSubscription } from "./getSubscription.js";
+import { logLine } from "./shared/cli/lines.js";
 
 export async function getBranchResources(args: {
   branchName: string;
   resourceGroupName: string;
   subscriptionName: string;
 }): Promise<ResourceTypeAndName[]> {
-  console.log(`
-Getting branch resources for:
-- Subscription: ${args.subscriptionName}
-- Resource Group: ${args.resourceGroupName}
-- BranchName: ${args.branchName}
-`);
+  logLine(`Getting branch resources for:`);
+  logLine(`- Subscription: ${args.subscriptionName}`);
+  logLine(`- Resource Group: ${args.resourceGroupName}`);
+  logLine(`- BranchName: ${args.branchName}`);
+  logLine();
 
   const credentials = new DefaultAzureCredential();
   const subscription = await getSubscription({
