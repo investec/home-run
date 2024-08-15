@@ -15,7 +15,6 @@ import {
   generateSettingsFunctionApp,
   getResourceNameAndKeyVaultResourceName,
 } from "../index.js";
-// import { createRerunSuggestion } from "../create/createRerunSuggestion.js";
 import { logLine } from "../shared/cli/lines.js";
 import { withSpinner } from "../shared/cli/spinners.js";
 import { StatusCodes } from "../shared/codes.js";
@@ -23,7 +22,6 @@ import { options } from "../shared/options/args.js";
 import { optionsSchema } from "../shared/options/optionsSchema.js";
 import { logHelpText } from "./help.js";
 import { getVersionFromPackageJson } from "./packageJson.js";
-// import { promptForMode } from "./promptForMode.js";
 
 const operationMessage = (verb: string) =>
   `Operation ${verb}. Exiting - maybe another time? 👋`;
@@ -60,6 +58,7 @@ export async function bin(args: string[]) {
     appLocation: values.appLocation,
     branchName: values.branchName,
     keyVaultName: values.keyVaultName,
+    mode: values.mode,
     name: values.name,
     resourceGroupName: values.resourceGroupName,
     subscriptionName: values.subscriptionName,
@@ -88,6 +87,7 @@ export async function bin(args: string[]) {
     appLocation,
     branchName,
     keyVaultName,
+    mode,
     name,
     resourceGroupName,
     subscriptionName,
@@ -100,6 +100,7 @@ export async function bin(args: string[]) {
       getResourceNameAndKeyVaultResourceName({
         branchName,
         keyVaultName,
+        mode,
         name,
         resourceGroupName,
         subscriptionName,
@@ -109,7 +110,6 @@ export async function bin(args: string[]) {
 
   switch (type) {
     case "containerapp":
-      // logLine(`Generating settings for container app: ${resourceName}`);
       await withSpinner(
         `Generating settings for container app: ${resourceName}`,
         () =>
@@ -123,7 +123,6 @@ export async function bin(args: string[]) {
       );
       break;
     case "functionapp":
-      // logLine(`Generating settings for function app: ${resourceName}`);
       await withSpinner(
         `Generating settings for function app: ${resourceName}`,
         () =>
@@ -137,45 +136,6 @@ export async function bin(args: string[]) {
       );
       break;
   }
-
-  //   logLine(introWarnings[0]);
-  //   logLine(introWarnings[1]);
-
-  // const { mode, options: promptedOptions } = await promptForMode(
-  //   !!values.auto,
-  //   values.mode,
-  // );
-  // if (typeof mode !== "string") {
-  //   prompts.outro(chalk.red(mode?.message ?? operationMessage("cancelled")));
-  //   return 1;
-  // }
-
-  // const runners = { create, initialize, migrate };
-  // const { code, error, options } = await runners[mode](args, promptedOptions);
-
-  // prompts.log.info(
-  // 	[
-  // 		chalk.italic(`Tip: to run again with the same input values, use:`),
-  // 		chalk.blue(createRerunSuggestion(options)),
-  // 	].join(" "),
-  // );
-
-  // if (code) {
-  // 	logLine();
-
-  // 	if (error) {
-  // 		logLine(
-  // 			chalk.red(typeof error === "string" ? error : fromZodError(error)),
-  // 		);
-  // 		logLine();
-  // 	}
-
-  // 	prompts.cancel(
-  // 		code === StatusCodes.Cancelled
-  // 			? operationMessage("cancelled")
-  // 			: operationMessage("failed"),
-  // 	);
-  // }
 
   prompts.outro(outroPrompts);
 

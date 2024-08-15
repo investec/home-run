@@ -5,7 +5,6 @@
  * LICENSE.md file in the root directory of this source tree.
  */
 
-import chalk from "chalk";
 import { beforeEach, describe, expect, it, MockInstance, vi } from "vitest";
 
 import { logHelpText } from "./help.js";

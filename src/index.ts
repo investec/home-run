@@ -19,6 +19,7 @@ import { logAsJson, logLine } from "./shared/cli/lines.js";
 async function getResourceNameAndKeyVaultResourceName({
   branchName,
   keyVaultName,
+  mode,
   name,
   resourceGroupName,
   subscriptionName,
@@ -26,6 +27,7 @@ async function getResourceNameAndKeyVaultResourceName({
 }: {
   branchName: string | undefined;
   keyVaultName: string | undefined;
+  mode: "explicit" | "resourcegroup";
   name: string | undefined;
   resourceGroupName: string;
   subscriptionName: string;
@@ -36,7 +38,8 @@ async function getResourceNameAndKeyVaultResourceName({
 }> {
   let resourceName = name ?? "";
   let keyVaultResourceName = keyVaultName ?? "";
-  if (!name || !keyVaultName) {
+
+  if (mode === "resourcegroup" && (!name || !keyVaultName)) {
     const git = simpleGit();
     const gitBranch = await git.branchLocal();
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -68,6 +71,7 @@ async function getResourceNameAndKeyVaultResourceName({
     );
     keyVaultResourceName = keyVaultResource?.name ?? keyVaultResourceName;
   }
+
   return { keyVaultResourceName, resourceName };
 }
 
