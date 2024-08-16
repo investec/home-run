@@ -18,8 +18,8 @@ To execute `home-run` you will need to be logged into the [Azure CLI](https://le
 
 `home-run` has two modes of operation:
 
-1. Specify Azure resources explicitly
-2. Use Azure tags to determine Azure resources
+1. `explicit` - specify Azure resources explicitly
+2. `resourcegroup` - use Azure tags to determine resources
 
 ### `explicit` - specify Azure resources explicitly
 
@@ -32,7 +32,7 @@ npx @investec/home-run --mode explicit --subscriptionName our-subscription --res
 
 Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with the name `ca-ourapp-dev`. If it finds a match, it will configure the local development environment for that app.
 
-### `resourcegroup` - one app per resource group with git branch tags
+### `resourcegroup` - use Azure tags to determine resources / one app per resource group with git branch tags
 
 This mode is useful when you have a single app per resource group and you want to use git branch tags to determine the Azure resources to use. This is an alternative to specifying the Azure resources explicitly. It will look for the type of resource you are interested in (e.g. `containerapp`) and will look for a [`Branch` tag](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) on the resource (e.g. `main`) which matches the current git branch name. Consider the following example:
 
