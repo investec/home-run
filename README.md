@@ -58,5 +58,5 @@ Given the above command, `home-run` will look for a resource group called `rg-ou
 
 ## Credits
 
-- This package was inspired by a [Jamie McCrindle](https://github.com/jamiemccrindle)'s prior art.
 - This project was templated with [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app).
+- This package was inspired by [Jamie McCrindle](https://github.com/jamiemccrindle)'s prior art.
