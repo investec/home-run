@@ -48,7 +48,7 @@ npx @investec/home-run
 --appLocation ./src/OurContainerApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with the name `ca-ourapp-dev`. If it finds a match, it will configure the local development environment for that app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with the name `ca-ourapp-dev`. If it finds a match, it will create a local development environment configuration file in `./src/OurContainerApp` for that app.
 
 To integrate `home-run` into your `package.json` scripts, you can do something like this:
 
@@ -68,7 +68,7 @@ Or with `npx`:
 
 With the above scripts, you can configure your local development environment with `npm run home-run`.
 
-### `resourcegroup` - use Azure tags to determine resources / one app per resource group with git branch tags
+### `resourcegroup` - use Azure tags to determine resources / multiple versions of an app per resource group with git branch tags
 
 This mode is useful when you have multiple versions of an app per resource group for different branches that exist, and you want to use git branch tags to determine the Azure resources to use. This is an alternative to specifying the Azure resources explicitly. It will look for the type of resource you are interested in (e.g. `containerapp`) and will look for a [`Branch` tag](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) on the resource (e.g. `main`) which matches the current git branch name. Consider the following example:
 
@@ -81,7 +81,7 @@ npx @investec/home-run
 --appLocation ./src/OurContainerApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will configure the local development environment for that branches app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create a local development environment configuration file in `./src/OurContainerApp` for that branches app.
 
 To integrate `home-run` into your `package.json` scripts, you can do something like this:
 
