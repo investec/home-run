@@ -1,4 +1,4 @@
-<h1 align="center">Home Run</h1>
+<h1 align="center">🏠🏃 Home Run</h1>
 
 <p align="center">Configure local development environments for Azure apps with one command</p>
 
@@ -10,7 +10,7 @@
     <img alt="💪 TypeScript: Strict" src="https://img.shields.io/badge/%F0%9F%92%AA_typescript-strict-21bb42.svg" />
 </p>
 
-Setting up a local development environment so that you can develop and test your Azure apps locally can be a pain. `home-run` is a CLI tool that makes it easy to configure your local development environment for Azure apps with one command.
+Setting up a local development environment, so that you can develop and test your Azure apps locally can be a pain. `home-run` is a CLI tool that makes it easy to configure your local development environment for Azure apps with one command.
 
 ## Installation
 
@@ -36,11 +36,16 @@ To execute `home-run` you will need to be logged into the [Azure CLI](https://le
 
 ### `explicit` - specify Azure resources explicitly
 
-In this mode you specify the Azure subscription, resource group, type of app, and the location of the app on your local machine. Consider the following example:
+In this mode you specify the Azure subscription, resource group, type of Azure resource, the name of your Azure resource, and the location of the app on your local machine. Consider the following example:
 
-```bash
-az login
-npx @investec/home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --appLocation ./src/OurContainerApp
+```sh
+npx @investec/home-run
+--mode explicit
+--subscriptionName our-subscription
+--resourceGroupName rg-our-resource-group
+--type containerapp
+--name ca-ourapp-dev
+--appLocation ./src/OurContainerApp
 ```
 
 Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with the name `ca-ourapp-dev`. If it finds a match, it will configure the local development environment for that app.
@@ -67,9 +72,13 @@ With the above scripts, you can configure your local development environment wit
 
 This mode is useful when you have multiple versions of an app per resource group for different branches that exist, and you want to use git branch tags to determine the Azure resources to use. This is an alternative to specifying the Azure resources explicitly. It will look for the type of resource you are interested in (e.g. `containerapp`) and will look for a [`Branch` tag](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) on the resource (e.g. `main`) which matches the current git branch name. Consider the following example:
 
-```bash
-az login
-npx @investec/home-run --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp
+```sh
+npx @investec/home-run
+--mode resourcegroup
+--subscriptionName our-subscription
+--resourceGroupName rg-our-resource-group
+--type containerapp
+--appLocation ./src/OurContainerApp
 ```
 
 Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will configure the local development environment for that branches app.
