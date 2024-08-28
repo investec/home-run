@@ -36,7 +36,9 @@ To execute `home-run` you will need to be logged into the [Azure CLI](https://le
 
 ### `explicit` - specify Azure resources explicitly
 
-In this mode you specify the Azure subscription, resource group, type of Azure resource, the name of your Azure resource, and the location of the app on your local machine. Consider the following example:
+In this mode you specify the Azure subscription, resource group, type of Azure resource, the name of your Azure resource, and the location of the app on your local machine.
+
+#### Container App Example
 
 ```sh
 npx @investec/home-run
@@ -49,7 +51,23 @@ npx @investec/home-run
 --appLocation ./src/OurContainerApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `containerapp` inside with the name `ca-ourapp-dev`. If it finds a match, it will create a local development environment configuration file in `./src/OurContainerApp` for that app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `containerapp` inside with the name `ca-ourapp-dev`. If it finds a match, it will create an `./src/OurContainerApp/appsettings.Development.json` for that app.
+
+#### Function App Example
+
+```sh
+npx @investec/home-run
+--mode explicit
+--subscriptionName our-subscription
+--resourceGroupName rg-our-resource-group
+--type functionapp
+--name func-ourapp-dev
+--appLocation ../ZebraGptFunctionApp
+```
+
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `functionapp` inside with the name `func-ourapp-dev`. If it finds a match, it will create an `../ZebraGptFunctionApp/local.settings.json` for that app.
+
+#### Integrating with `package.json`
 
 To integrate `home-run` into your `package.json` scripts, you can do something like this:
 
@@ -71,7 +89,9 @@ With the above scripts, you can configure your local development environment wit
 
 ### `resourcegroup` - use Azure tags to determine resources / multiple versions of an app per resource group with git branch tags
 
-This mode is useful when you have multiple versions of an app per resource group for different branches that exist, and you want to use git branch tags to determine the Azure resources to use. This is an alternative to specifying the Azure resources explicitly. It will look for the type of resource you are interested in (e.g. `containerapp`) and will look for a [`Branch` tag](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) on the resource (e.g. `main`) which matches the current git branch name. Consider the following example:
+This mode is useful when you have multiple versions of an app per resource group for different branches that exist, and you want to use git branch tags to determine the Azure resources to use. This is an alternative to specifying the Azure resources explicitly. It will look for the type of resource you are interested in (e.g. `containerapp`) and will look for a [`Branch` tag](https://learn.microsoft.com/en-us/azure/azure-resource-manager/management/tag-resources) on the resource (e.g. `main`) which matches the current git branch name.
+
+#### Container App Example
 
 ```sh
 npx @investec/home-run
@@ -82,7 +102,22 @@ npx @investec/home-run
 --appLocation ./src/OurContainerApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` inside with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create a local development environment configuration file in `./src/OurContainerApp` for that branches app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `containerapp` inside with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create an `appsettings.Development.json` file in `./src/OurContainerApp` for that branches app.
+
+#### Function App Example
+
+```sh
+npx @investec/home-run
+--mode resourcegroup
+--subscriptionName our-subscription
+--resourceGroupName rg-our-resource-group
+--type functionapp
+--appLocation ./src/ZebraGptFunctionApp
+```
+
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `functionapp` inside with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create a `local.settings.json` file in `./src/ZebraGptFunctionApp` for that branches app.
+
+#### Integrating with `package.json`
 
 To integrate `home-run` into your `package.json` scripts, you can do something like this:
 

@@ -44,12 +44,6 @@ If you're using the `resourcegroup` mode, then there's an implicit expectation t
 npx [PATH TO HOME RUN] --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp
 ```
 
-WILL DELETE THE BELOW ALSO
-
-```sh
-npm run dev -- --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type functionapp --name func-zebragpt-7l4a8lm8ra-dev --appLocation ../ZebraGptFunctionApp
-```
-
 ## Building
 
 Run [**tsup**](https://tsup.egoist.dev) locally to build source files from `src/` into output files in `lib/`:
