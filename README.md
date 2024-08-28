@@ -45,6 +45,7 @@ npx @investec/home-run
 --resourceGroupName rg-our-resource-group
 --type containerapp
 --name ca-ourapp-dev
+--keyVaultName kv-ourapp-dev # optional
 --appLocation ./src/OurContainerApp
 ```
 
@@ -54,7 +55,7 @@ To integrate `home-run` into your `package.json` scripts, you can do something l
 
 ```json
 "scripts": {
-    "home-run": "az login && home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --appLocation ./src/OurContainerApp"
+    "home-run": "az login && home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --keyVaultName kv-ourapp-dev --appLocation ./src/OurContainerApp"
 }
 ```
 
@@ -113,6 +114,10 @@ With the above scripts, you can configure your local development environment wit
 - `-b` | `--branchName` (`string`): Allows users to supply an explicit branch name - if not supplied, the current git branch will be used
 - `-v` | `--version`: Show version
 - `-h` | `--help`: Show help
+
+## Contributing
+
+Please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
 ## Credits
 

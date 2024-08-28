@@ -31,30 +31,23 @@ az login
 You can test the `explicit` mode by running:
 
 ```sh
-npx . --mode explicit --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --name ca-zebragpt-dev --keyVaultName kv-zebragpt-dev --appLocation /Users/john.reilly/code/dev.azure.com/investec-cloud-experience/zebra-gpt/src/ZebraGptContainerApp
-npx . --mode explicit --subscriptionName ice-arch-eng --resourceGroupName rg-ae-notebooks-dev-001 --type containerapp --name ca-aenb-dev-001 --keyVaultName kv-ae-nb-dev-001 --appLocation /Users/john.reilly/code/dev.azure.com/investec-cloud-experience/ae-notebooks/src/AENotebooksContainerApp
+npx . --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --keyVaultName kv-ourapp-dev --appLocation [PATH TO YOUR CONTAINER APP]
 ```
 
-The above two examples will configure the local development environment for the `ZebraGptContainerApp` and `AENotebooksContainerApp` respectively. I'll replace the above examples with something more generic in future.
+The above two examples will configure the local development environment for the `OurContainerApp` respectively. I'll replace the above examples with something more generic in future.
 
 ### `resourcegroup` - one app per resource group with git branch tags
 
-If you're using the `resourcegroup` mode, then there's an implicit expectation that you'll be executing the command from within the directory of the app you're interested in configuring. For example, if you're in the `ZebraGptContainerApp` directory, you can run:
+If you're using the `resourcegroup` mode, then there's an implicit expectation that you'll be executing the command from within the directory of the app you're interested in configuring. For example, if you're in the `OurContainerApp` directory, you can run:
 
 ```sh
-npx ../../../github.com/home-run --mode resourcegroup --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --appLocation ./src/ZebraGptContainerApp
+npx [PATH TO HOME RUN] --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp
 ```
-
-Again, I'll replace the above example with something more generic in future.
 
 WILL DELETE THE BELOW ALSO
 
 ```sh
-npx ../../../github.com/home-run --mode resourcegroup --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --appLocation ./src/ZebraGptContainerApp
-
-npx ../../../github.com/home-run --mode explicit --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type containerapp --name ca-zebragpt-dev --appLocation ./src/ZebraGptContainerApp
-
-npm run dev -- --subscriptionName ice-arch-eng --resourceGroupName rg-zebra-gpt-dev-001 --type functionapp --name func-zebragpt-7l4a8lm8ra-dev --appLocation ../ZebraGptFunctionApp
+npm run dev -- --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type functionapp --name func-zebragpt-7l4a8lm8ra-dev --appLocation ../ZebraGptFunctionApp
 ```
 
 ## Building
