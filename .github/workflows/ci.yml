@@ -57,6 +57,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare
       - run: pnpm build
+      # - run: npx --yes @arethetypeswrong/cli --pack .
       - run: npx --yes @arethetypeswrong/cli --pack . --ignore-rules cjs-resolves-to-esm
 
 name: CI
