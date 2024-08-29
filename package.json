@@ -12,7 +12,14 @@
     "email": "john.reilly@investec.com"
   },
   "type": "module",
-  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "types": "./lib/index.d.ts",
+      "import": "./lib/index.js"
+    }
+  },
+  "module": "./lib/index.js",
+  "types": "./lib/index.d.ts",
   "bin": "./bin/index.js",
   "files": [
     "bin/index.js",
