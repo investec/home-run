@@ -58,7 +58,7 @@ export const allArgOptions: Record<ValidOption, DocOption> = {
   appLocation: {
     ...options.appLocation,
     description:
-      "The location of the app, and the directory where the settings file will be generated eg ../ZebraGptFunctionApp/",
+      "The location of the app, and the directory where the settings file will be generated eg ../OurFunctionApp/",
     docsSection: "core",
   },
 
@@ -94,7 +94,7 @@ export const allArgOptions: Record<ValidOption, DocOption> = {
   name: {
     ...options.name,
     description:
-      "The name of the explicit Azure resource eg zebragpt (the type of resource is determined by the type option) - required if mode is explicit",
+      "The name of the explicit Azure resource eg ourapp (the type of resource is determined by the type option) - required if mode is explicit",
     docsSection: "core",
   },
 

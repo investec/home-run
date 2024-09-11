@@ -44,7 +44,7 @@ describe("logHelpText", () => {
         ],
         [
           "
-        -l | --appLocation (string): The location of the app, and the directory where the settings file will be generated eg ../ZebraGptFunctionApp/",
+        -l | --appLocation (string): The location of the app, and the directory where the settings file will be generated eg ../OurFunctionApp/",
         ],
         [
           "
@@ -60,7 +60,7 @@ describe("logHelpText", () => {
         ],
         [
           "
-        -n | --name (string): The name of the explicit Azure resource eg zebragpt (the type of resource is determined by the type option) - required if mode is explicit",
+        -n | --name (string): The name of the explicit Azure resource eg ourapp (the type of resource is determined by the type option) - required if mode is explicit",
         ],
         [
           "

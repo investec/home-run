@@ -62,10 +62,10 @@ npx @investec/home-run
 --resourceGroupName rg-our-resource-group
 --type functionapp
 --name func-ourapp-dev
---appLocation ../ZebraGptFunctionApp
+--appLocation ../OurFunctionApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `functionapp` inside with the name `func-ourapp-dev`. If it finds a match, it will create an `../ZebraGptFunctionApp/local.settings.json` for that app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `functionapp` inside with the name `func-ourapp-dev`. If it finds a match, it will create an `../OurFunctionApp/local.settings.json` for that app.
 
 #### Integrating with `package.json`
 
@@ -112,10 +112,10 @@ npx @investec/home-run
 --subscriptionName our-subscription
 --resourceGroupName rg-our-resource-group
 --type functionapp
---appLocation ./src/ZebraGptFunctionApp
+--appLocation ./src/OurFunctionApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `functionapp` inside with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create a `local.settings.json` file in `./src/ZebraGptFunctionApp` for that branches app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and will look for a `functionapp` inside with a `Branch` tag that matches the current git branch name, eg `main`. If `home-run` finds a match, it will create a `local.settings.json` file in `./src/OurFunctionApp` for that branches app.
 
 #### Integrating with `package.json`
 
