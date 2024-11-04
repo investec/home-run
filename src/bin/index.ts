@@ -10,10 +10,10 @@ import chalk from "chalk";
 import { parseArgs } from "node:util";
 import { fromZodError } from "zod-validation-error";
 
+import { getResourceNameAndKeyVaultResourceName } from "../index.js";
 import {
   generateSettingsContainerApp,
   generateSettingsFunctionApp,
-  getResourceNameAndKeyVaultResourceName,
 } from "../index.js";
 import { logLine } from "../shared/cli/lines.js";
 import { withSpinner } from "../shared/cli/spinners.js";
