@@ -25,7 +25,9 @@ export default tseslint.config(
   },
   eslint.configs.recommended,
   comments.recommended,
-  jsdoc.configs["flat/recommended-typescript-error"],
+  jsdoc.configs["flat/contents-typescript-error"],
+  jsdoc.configs["flat/logical-typescript-error"],
+  jsdoc.configs["flat/stylistic-typescript-error"],
   n.configs["flat/recommended"],
   packageJson,
   perfectionist.configs["recommended-natural"],
@@ -39,45 +41,60 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ["*.*s", "bin/*.js", "eslint.config.js"],
+          allowDefaultProject: ["*.*s", "eslint.config.js"],
           defaultProject: "./tsconfig.json",
         },
         tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {
-      // These off-by-default rules work well for this repo and we like them on.
-      "jsdoc/informative-docs": "error",
-      "operator-assignment": "error",
-
+      // These on-by-default rules work well for this repo if configured
+      "@typescript-eslint/no-unused-vars": [
+        "error",
+        {
+          args: "all",
+          argsIgnorePattern: "^_",
+          caughtErrors: "all",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          ignoreRestSiblings: true,
+        },
+      ],
       // These on-by-default rules don't work well for this repo and we like them off.
       "jsdoc/lines-before-block": "off",
-      "jsdoc/require-jsdoc": "off",
-      "jsdoc/require-param": "off",
-      "jsdoc/require-property": "off",
-      "jsdoc/require-returns": "off",
-      "no-constant-condition": "off",
 
-      // These on-by-default rules work well for this repo if configured
-      "@typescript-eslint/no-unused-vars": ["error", { caughtErrors: "all" }],
-      "@typescript-eslint/prefer-reduce-type-parameter": "off",
+      // These off-by-default rules work well for this repo and we like them on.
+      "logical-assignment-operators": [
+        "error",
+        "always",
+        { enforceForIfStatements: true },
+      ],
       "n/no-unsupported-features/node-builtins": [
         "error",
         { allowExperimental: true },
       ],
 
-      "perfectionist/sort-objects": [
-        "error",
-        {
-          order: "asc",
-          partitionByComment: true,
-          type: "natural",
-        },
-      ],
-
+      "no-constant-condition": "off",
       // Stylistic concerns that don't interfere with Prettier
       "no-useless-rename": "error",
       "object-shorthand": "error",
+      // "perfectionist/sort-objects": [
+      // 	"error",
+      // 	{
+      // 		order: "asc",
+      // 		partitionByComment: true,
+      // 		type: "natural",
+      // 	},
+      // ],
+
+      "logical-assignment-operators": "off",
+
+      "operator-assignment": "error",
+      "perfectionist/sort-objects": "off",
+      "perfectionist/sort-object-types": "off",
+
+      "jsdoc/match-description": "off",
     },
   }),
   {
@@ -92,7 +109,7 @@ export default tseslint.config(
     extends: [tseslint.configs.disableTypeChecked],
     files: ["**/*.md/*.ts"],
     rules: {
-      "n/no-missing-import": ["error", { allowModules: ["home-run"] }],
+      "n/no-missing-import": ["error", { allowModules: ["azdo-npm-auth"] }],
     },
   },
   {
