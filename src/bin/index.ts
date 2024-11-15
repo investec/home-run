@@ -10,12 +10,13 @@ import chalk from "chalk";
 import { parseArgs } from "node:util";
 import { fromZodError } from "zod-validation-error";
 
+import type { Logger } from "../shared/cli/logger.js";
+
 import { getResourceNameAndKeyVaultResourceName } from "../index.js";
 import {
   generateSettingsContainerApp,
   generateSettingsFunctionApp,
 } from "../index.js";
-import { logLine } from "../shared/cli/lines.js";
 import { withSpinner } from "../shared/cli/spinners.js";
 import { StatusCodes } from "../shared/codes.js";
 import { options } from "../shared/options/args.js";
@@ -28,6 +29,18 @@ const operationMessage = (verb: string) =>
 
 export async function bin(args: string[]) {
   console.clear();
+
+  const logger: Logger = {
+    info: (message = "") => {
+      prompts.log.info(message);
+    },
+    error: (message = "") => {
+      prompts.log.error(message);
+    },
+    success: (message = "") => {
+      prompts.log.success(message);
+    },
+  };
 
   const version = await getVersionFromPackageJson();
 
@@ -52,8 +65,6 @@ export async function bin(args: string[]) {
 
   prompts.intro(introPrompts);
 
-  logLine();
-
   const mappedOptions = {
     appLocation: values.appLocation,
     branchName: values.branchName,
@@ -68,14 +79,13 @@ export async function bin(args: string[]) {
   const optionsParseResult = optionsSchema.safeParse(mappedOptions);
 
   if (!optionsParseResult.success) {
-    logLine(
+    logger.error(
       chalk.red(
         fromZodError(optionsParseResult.error, {
           issueSeparator: "\n    - ",
         }),
       ),
     );
-    logLine();
 
     prompts.cancel(operationMessage("failed"));
     prompts.outro(outroPrompts);
@@ -96,7 +106,8 @@ export async function bin(args: string[]) {
 
   const { keyVaultResourceName, resourceName } = await withSpinner(
     `Getting resource name and key vault resource name`,
-    () =>
+    logger,
+    (logger) =>
       getResourceNameAndKeyVaultResourceName({
         branchName,
         keyVaultName,
@@ -105,6 +116,7 @@ export async function bin(args: string[]) {
         resourceGroupName,
         subscriptionName,
         type,
+        logger,
       }),
   );
 
@@ -112,26 +124,30 @@ export async function bin(args: string[]) {
     case "containerapp":
       await withSpinner(
         `Generating settings for container app: ${resourceName}`,
-        () =>
+        logger,
+        (logger) =>
           generateSettingsContainerApp({
             appLocation,
             containerAppName: resourceName,
             keyVaultName: keyVaultResourceName,
             resourceGroupName,
             subscriptionName,
+            logger,
           }),
       );
       break;
     case "functionapp":
       await withSpinner(
         `Generating settings for function app: ${resourceName}`,
-        () =>
+        logger,
+        (logger) =>
           generateSettingsFunctionApp({
             appLocation,
             functionAppName: resourceName,
             keyVaultName: keyVaultResourceName,
             resourceGroupName,
             subscriptionName,
+            logger,
           }),
       );
       break;

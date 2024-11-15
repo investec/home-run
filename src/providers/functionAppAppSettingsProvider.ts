@@ -10,22 +10,23 @@ import type { DefaultAzureCredential } from "@azure/identity";
 
 import { WebSiteManagementClient } from "@azure/arm-appservice";
 
+import type { Logger } from "../shared/cli/logger.js";
 import type { SettingsProvider } from "../types.js";
-
-import { logLine } from "../shared/cli/lines.js";
 
 async function getFunctionAppAppSettings({
   credentials,
   functionAppName,
   resourceGroupName,
   subscription,
+  logger,
 }: {
   credentials: DefaultAzureCredential;
   functionAppName: string;
   resourceGroupName: string;
   subscription: Subscription;
+  logger: Logger;
 }): Promise<Record<string, string>> {
-  logLine(`Getting function: ${functionAppName}`);
+  logger.info(`Getting function: ${functionAppName}`);
 
   if (!subscription.subscriptionId) {
     throw new Error("subscriptionId is undefined");

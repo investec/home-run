@@ -12,29 +12,36 @@ import {
 import { DefaultAzureCredential } from "@azure/identity";
 import { simpleGit } from "simple-git";
 
-import { getSubscription } from "./getSubscription.js";
-import { logAsJson, logLine } from "./shared/cli/lines.js";
+import type { Logger } from "./shared/cli/logger.js";
 
-export async function getBranchResources(args: {
+import { getSubscription } from "./getSubscription.js";
+
+export async function getBranchResources({
+  branchName,
+  resourceGroupName,
+  subscriptionName,
+  logger,
+}: {
   branchName: string;
   resourceGroupName: string;
   subscriptionName: string;
+  logger: Logger;
 }): Promise<ResourceTypeAndName[]> {
-  logLine(`Getting branch resources for:`);
-  logLine(`- Subscription: ${args.subscriptionName}`);
-  logLine(`- Resource Group: ${args.resourceGroupName}`);
-  logLine(`- BranchName: ${args.branchName}`);
-  logLine();
+  logger.info(`Getting branch resources for:
+- Subscription: ${subscriptionName}
+- Resource Group: ${resourceGroupName}
+- BranchName: ${branchName}
+`);
 
   const credentials = new DefaultAzureCredential();
   const subscription = await getSubscription({
     credentials,
-    subscriptionName: args.subscriptionName,
+    subscriptionName,
   });
 
   if (!subscription.subscriptionId) {
     throw new Error(
-      `Could not find subscription with name ${args.subscriptionName}`,
+      `Could not find subscription with name ${subscriptionName}`,
     );
   }
 
@@ -43,26 +50,24 @@ export async function getBranchResources(args: {
     subscription.subscriptionId,
   );
 
-  const resourceGroup = await resourceClient.resourceGroups.get(
-    args.resourceGroupName,
-  );
+  const resourceGroup =
+    await resourceClient.resourceGroups.get(resourceGroupName);
 
   // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
   if (!resourceGroup) {
     throw new Error(
-      `Could not find resource group with name ${args.resourceGroupName}`,
+      `Could not find resource group with name ${resourceGroupName}`,
     );
   }
 
-  const branchResources = resourceClient.resources.listByResourceGroup(
-    args.resourceGroupName,
-  );
+  const branchResources =
+    resourceClient.resources.listByResourceGroup(resourceGroupName);
 
   const branchResourcesArray: GenericResourceExpanded[] = [];
   for await (const branchResource of branchResources) {
     if (
-      branchResource.tags?.Branch?.endsWith(args.branchName) ||
-      branchResource.tags?.branch?.endsWith(args.branchName)
+      branchResource.tags?.Branch?.endsWith(branchName) ||
+      branchResource.tags?.branch?.endsWith(branchName)
     ) {
       branchResourcesArray.push(branchResource);
     }
@@ -88,6 +93,7 @@ export async function getResourceNameAndKeyVaultResourceName({
   resourceGroupName,
   subscriptionName,
   type,
+  logger,
 }: {
   branchName: string | undefined;
   keyVaultName: string | undefined;
@@ -96,6 +102,7 @@ export async function getResourceNameAndKeyVaultResourceName({
   resourceGroupName: string;
   subscriptionName: string;
   type: string;
+  logger: Logger;
 }): Promise<{
   keyVaultResourceName: string;
   resourceName: string;
@@ -113,10 +120,11 @@ export async function getResourceNameAndKeyVaultResourceName({
       branchName: gitBranchName,
       resourceGroupName,
       subscriptionName,
+      logger,
     });
-    logLine();
-    logLine(`Branch resources for ${gitBranchName}`);
-    logAsJson(branchResources);
+    logger.info();
+    logger.info(`Branch resources for ${gitBranchName}`);
+    logger.info(JSON.stringify(branchResources, null, 2));
 
     if (type === "functionapp") {
       const functionAppResource = branchResources.find(

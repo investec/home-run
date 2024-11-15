@@ -8,58 +8,70 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import chalk from "chalk";
 import { promises as fs } from "fs";
+import path from "node:path";
+
+import type { Logger } from "./shared/cli/logger.js";
 
 import { getSubscription } from "./getSubscription.js";
 import { makeNestedSettings } from "./nestedSettings.js";
 import { containerAppEnvironmentVariablesProvider } from "./providers/containerAppEnvironmentVariablesProvider.js";
 import { keyVaultProvider } from "./providers/keyVaultProvider.js";
-import { logAsJson, logLine } from "./shared/cli/lines.js";
 
-export async function generateSettingsContainerApp(args: {
+export async function generateSettingsContainerApp({
+  appLocation,
+  containerAppName,
+  keyVaultName,
+  resourceGroupName,
+  subscriptionName,
+  logger,
+}: {
   appLocation: string;
   containerAppName: string;
   keyVaultName: string | undefined;
   resourceGroupName: string;
   subscriptionName: string;
+  logger: Logger;
 }) {
-  logLine(`Generating Container App settings for:`);
-  logLine(`- Subscription: ${args.subscriptionName}`);
-  logLine(`- Resource Group: ${args.resourceGroupName}`);
-  logLine(`- AppLocation: ${args.appLocation}`);
-  logLine(`- ContainerAppName: ${args.containerAppName}`);
-  logLine(`- KeyVaultName: ${args.keyVaultName ?? ""}`);
-  logLine();
+  logger.info(`Generating Container App settings for:
+- Subscription: ${subscriptionName}
+- Resource Group: ${resourceGroupName}
+- AppLocation: ${appLocation}
+- ContainerAppName: ${containerAppName}
+- KeyVaultName: ${keyVaultName ?? ""}
+`);
 
   const credentials = new DefaultAzureCredential();
   const subscription = await getSubscription({
     credentials,
-    subscriptionName: args.subscriptionName,
+    subscriptionName,
   });
 
   const environmentVariables =
     await containerAppEnvironmentVariablesProvider.getSettings({
-      containerAppName: args.containerAppName,
+      containerAppName,
       credentials,
-      resourceGroupName: args.resourceGroupName,
+      resourceGroupName,
       subscription,
+      logger,
     });
 
-  logLine();
-  logLine(`${chalk.bold("environmentVariables")}:`);
-  logAsJson(environmentVariables);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("environmentVariables")}:`);
+  logger.info(JSON.stringify(environmentVariables, null, 2));
+  logger.info();
 
-  const keyVaultSettings = args.keyVaultName
+  const keyVaultSettings = keyVaultName
     ? await keyVaultProvider.getSettings({
         credentials,
-        keyVaultName: args.keyVaultName,
+        keyVaultName,
+        logger,
       })
     : {};
 
-  logLine();
-  logLine(`${chalk.bold("keyVaultSettings")}:`);
-  logAsJson(keyVaultSettings);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("keyVaultSettings")}:`);
+  logger.info(JSON.stringify(keyVaultSettings, null, 2));
+  logger.info();
 
   const settings = makeNestedSettings({
     delimiter: keyVaultProvider.nestingDelimiter,
@@ -71,13 +83,17 @@ export async function generateSettingsContainerApp(args: {
     }),
   });
 
-  logLine();
-  logLine(`${chalk.bold("generated configuration")}:`);
-  logAsJson(settings);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("generated configuration")}:`);
+  logger.info(JSON.stringify(settings, null, 2));
+  logger.info();
 
-  const appSettingsPath = `${args.appLocation}/appsettings.Development.json`;
-  logLine(
+  const appSettingsPath = path.resolve(
+    process.cwd(),
+    appLocation,
+    "appsettings.Development.json",
+  );
+  logger.success(
     `Generating settings file at ${appSettingsPath} - DO NOT COMMIT THIS FILE IF IT CONTAINS SECRETS!`,
   );
 

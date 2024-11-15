@@ -10,9 +10,8 @@ import type { DefaultAzureCredential } from "@azure/identity";
 
 import { ContainerAppsAPIClient } from "@azure/arm-appcontainers";
 
+import type { Logger } from "../shared/cli/logger.js";
 import type { SettingsProvider } from "../types.js";
-
-import { logLine } from "../shared/cli/lines.js";
 
 // https://learn.microsoft.com/en-us/aspnet/core/fundamentals/configuration/?view=aspnetcore-6.0
 // The : separator doesn't work with environment variable hierarchical keys on all platforms. __, the double underscore, is
@@ -22,14 +21,15 @@ async function getContainerAppEnvironmentVariables({
   credentials,
   resourceGroupName,
   subscription,
+  logger,
 }: {
   containerAppName: string;
   credentials: DefaultAzureCredential;
   resourceGroupName: string;
   subscription: Subscription;
+  logger: Logger;
 }): Promise<Record<string, string>> {
-  logLine();
-  logLine(`Getting container app: ${containerAppName}`);
+  logger.info(`Getting container app: ${containerAppName}`);
 
   if (!subscription.subscriptionId) {
     throw new Error("subscriptionId is undefined");

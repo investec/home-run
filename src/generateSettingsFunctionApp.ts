@@ -8,57 +8,69 @@
 import { DefaultAzureCredential } from "@azure/identity";
 import chalk from "chalk";
 import { promises as fs } from "fs";
+import path from "node:path";
+
+import type { Logger } from "./shared/cli/logger.js";
 
 import { getSubscription } from "./getSubscription.js";
 import { makeNestedSettings } from "./nestedSettings.js";
 import { functionAppAppSettingsProvider } from "./providers/functionAppAppSettingsProvider.js";
 import { keyVaultProvider } from "./providers/keyVaultProvider.js";
-import { logAsJson, logLine } from "./shared/cli/lines.js";
 
-export async function generateSettingsFunctionApp(args: {
+export async function generateSettingsFunctionApp({
+  appLocation,
+  functionAppName,
+  keyVaultName,
+  resourceGroupName,
+  subscriptionName,
+  logger,
+}: {
   appLocation: string;
   functionAppName: string;
   keyVaultName: string | undefined;
   resourceGroupName: string;
   subscriptionName: string;
+  logger: Logger;
 }) {
-  logLine(`Generating Function App settings for:`);
-  logLine(`- Subscription: ${args.subscriptionName}`);
-  logLine(`- Resource Group: ${args.resourceGroupName}`);
-  logLine(`- AppLocation: ${args.appLocation}`);
-  logLine(`- FunctionAppName: ${args.functionAppName}`);
-  logLine(`- KeyVaultName: ${args.keyVaultName ?? ""}`);
-  logLine();
+  logger.info(`Generating Function App settings for:
+- Subscription: ${subscriptionName}
+- Resource Group: ${resourceGroupName}
+- AppLocation: ${appLocation}
+- FunctionAppName: ${functionAppName}
+- KeyVaultName: ${keyVaultName ?? ""}
+`);
 
   const credentials = new DefaultAzureCredential();
   const subscription = await getSubscription({
     credentials,
-    subscriptionName: args.subscriptionName,
+    subscriptionName,
   });
 
   const appSettings = await functionAppAppSettingsProvider.getSettings({
     credentials,
-    functionAppName: args.functionAppName,
-    resourceGroupName: args.resourceGroupName,
+    functionAppName,
+    resourceGroupName,
     subscription,
+    logger,
   });
 
-  logLine();
-  logLine(`${chalk.bold("appSettings")}:`);
-  logAsJson(appSettings);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("appSettings")}:`);
+  logger.info(JSON.stringify(appSettings, null, 2));
+  logger.info();
 
-  const keyVaultSettings = args.keyVaultName
+  const keyVaultSettings = keyVaultName
     ? await keyVaultProvider.getSettings({
         credentials,
-        keyVaultName: args.keyVaultName,
+        keyVaultName,
+        logger,
       })
     : {};
 
-  logLine();
-  logLine(`${chalk.bold("keyVaultSettings")}:`);
-  logAsJson(keyVaultSettings);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("keyVaultSettings")}:`);
+  logger.info(JSON.stringify(keyVaultSettings, null, 2));
+  logger.info();
 
   const settings = makeNestedSettings({
     delimiter: keyVaultProvider.nestingDelimiter,
@@ -75,13 +87,17 @@ export async function generateSettingsFunctionApp(args: {
     Values: settings,
   };
 
-  logLine();
-  logLine(`${chalk.bold("generated configuration")}:`);
-  logAsJson(localSettings);
-  logLine();
+  logger.info();
+  logger.info(`${chalk.bold("generated configuration")}:`);
+  logger.info(JSON.stringify(localSettings, null, 2));
+  logger.info();
 
-  const localSettingsPath = `${args.appLocation}/local.settings.json`;
-  logLine(
+  const localSettingsPath = path.resolve(
+    process.cwd(),
+    appLocation,
+    "local.settings.json",
+  );
+  logger.success(
     `Generating settings file at ${localSettingsPath} - DO NOT COMMIT THIS FILE IF IT CONTAINS SECRETS!`,
   );
 
