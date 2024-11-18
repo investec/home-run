@@ -51,7 +51,7 @@ npx @investec/home-run
 --appLocation ./src/OurContainerApp
 ```
 
-Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `containerapp` inside with the name `ca-ourapp-dev`. If it finds a match, it will create an `./src/OurContainerApp/appsettings.Development.json` for that app.
+Given the above command, `home-run` will look for a resource group called `rg-our-resource-group` and try to find a `containerapp` inside with the name `ca-ourapp-dev` and a key vault with the `kv-ourapp-dev`. If it finds a match, it will create an `./src/OurContainerApp/appsettings.Development.json` for that app using the environment variables of the container app and the values in the key vault.
 
 #### Function App Example
 
@@ -69,11 +69,11 @@ Given the above command, `home-run` will look for a resource group called `rg-ou
 
 #### Integrating with `package.json`
 
-To integrate `home-run` into your `package.json` scripts, you can do something like this:
+It's possible to integrate `home-run` into a `package.json` script like so:
 
 ```json
 "scripts": {
-    "home-run": "az login && home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --keyVaultName kv-ourapp-dev --appLocation ./src/OurContainerApp"
+    "home-run": "@investec/home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --keyVaultName kv-ourapp-dev --appLocation ./src/OurContainerApp"
 }
 ```
 
@@ -81,11 +81,11 @@ Or with `npx`:
 
 ```json
 "scripts": {
-    "home-run": "az login && npx @investec/home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --appLocation ./src/OurContainerApp"
+    "home-run": "npx @investec/home-run --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --appLocation ./src/OurContainerApp"
 }
 ```
 
-With the above scripts, you can configure your local development environment with `npm run home-run`.
+Running `npm run home-run` will configure the local development environment. If you are already logged into the Azure CLI, Home Run will use the existing session. If not, you will be prompted to log in with `az login`. If you choose, you could also add `az login` to the start of the script.
 
 ### `resourcegroup` - use Azure tags to determine resources / multiple versions of an app per resource group with git branch tags
 
@@ -123,7 +123,7 @@ To integrate `home-run` into your `package.json` scripts, you can do something l
 
 ```json
 "scripts": {
-    "home-run": "az login && home-run --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp"
+    "home-run": "@investec/home-run --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp"
 }
 ```
 
@@ -131,7 +131,7 @@ Or with `npx`:
 
 ```json
 "scripts": {
-    "home-run": "az login && npx @investec/home-run --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp"
+    "home-run": "npx @investec/home-run --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp"
 }
 ```
 
@@ -156,5 +156,5 @@ Please see the [contributing guidelines](.github/CONTRIBUTING.md).
 
 ## Credits
 
+- The inspiration for this project was prior art by [Jamie McCrindle](https://github.com/jamiemccrindle).
 - This project was templated with [`create-typescript-app`](https://github.com/JoshuaKGoldberg/create-typescript-app).
-- This package was inspired by [Jamie McCrindle](https://github.com/jamiemccrindle)'s prior art.
