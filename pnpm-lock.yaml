@@ -6343,7 +6343,7 @@ snapshots:
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.49
-      rollup: 4.20.0
+      rollup: 4.27.3
     optionalDependencies:
       '@types/node': 22.3.0
       fsevents: 2.3.3
