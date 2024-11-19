@@ -10,12 +10,18 @@ export const options = {
     short: "l",
     type: "string",
   },
-  branchName: { short: "b", type: "string" },
+  branchName: {
+    short: "b",
+    type: "string",
+  },
   help: {
     short: "h",
     type: "boolean",
   },
-  keyVaultName: { short: "k", type: "string" },
+  keyVaultName: {
+    short: "k",
+    type: "string",
+  },
   mode: {
     short: "m",
     type: "string",
