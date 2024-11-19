@@ -1,5 +1,11 @@
 # Development
 
+To develop this project, you need to have the following tools installed:
+
+- [Node.js](https://nodejs.org/) (and npm)
+- [pnpm](https://pnpm.io/)
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/)
+
 After [forking the repo from GitHub](https://help.github.com/articles/fork-a-repo) and [installing pnpm](https://pnpm.io/installation):
 
 ```shell
@@ -10,6 +16,33 @@ pnpm install
 
 > This repository includes a list of suggested VS Code extensions.
 > It's a good idea to use [VS Code](https://code.visualstudio.com) and accept its suggestion to install them, as they'll help with development.
+
+## Running locally
+
+To test `npx` mode locally, run:
+
+```sh
+pnpm run build
+az login
+```
+
+### `explicit` - specify Azure resources explicitly
+
+You can test the `explicit` mode by running:
+
+```sh
+npx . --mode explicit --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --name ca-ourapp-dev --keyVaultName kv-ourapp-dev --appLocation [PATH TO YOUR CONTAINER APP]
+```
+
+The above two examples will configure the local development environment for the `OurContainerApp` respectively. I'll replace the above examples with something more generic in future.
+
+### `resourcegroup` - one app per resource group with git branch tags
+
+If you're using the `resourcegroup` mode, then there's an implicit expectation that you'll be executing the command from within the directory of the app you're interested in configuring. For example, if you're in the `OurContainerApp` directory, you can run:
+
+```sh
+npx [PATH TO HOME RUN] --mode resourcegroup --subscriptionName our-subscription --resourceGroupName rg-our-resource-group --type containerapp --appLocation ./src/OurContainerApp
+```
 
 ## Building
 
