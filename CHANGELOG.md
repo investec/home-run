@@ -1,3 +1,9 @@
+## [0.2.1](https://github.com/investec/home-run/compare/0.2.0...0.2.1) (2024-11-19)
+
+### Bug Fixes
+
+- use the correct reference of the npm package ([#4](https://github.com/investec/home-run/issues/4)) ([e34bb82](https://github.com/investec/home-run/commit/e34bb827ed336a8fb7cca9e847fbceb35ae6409e)), closes [#000](https://github.com/investec/home-run/issues/000)
+
 # 0.2.0 (2024-11-19)
 
 ### Features
