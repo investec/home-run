@@ -66,8 +66,8 @@ export async function getBranchResources({
   const branchResourcesArray: GenericResourceExpanded[] = [];
   for await (const branchResource of branchResources) {
     if (
-      branchResource.tags?.Branch?.endsWith(branchName) ||
-      branchResource.tags?.branch?.endsWith(branchName)
+      branchResource.tags?.Branch.endsWith(branchName) ||
+      branchResource.tags?.branch.endsWith(branchName)
     ) {
       branchResourcesArray.push(branchResource);
     }
