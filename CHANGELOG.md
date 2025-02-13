@@ -1,3 +1,9 @@
+## [0.2.2](https://github.com/investec/home-run/compare/0.2.1...0.2.2) (2025-02-13)
+
+### Bug Fixes
+
+- docs in README - minor case consistency improvements ([#15](https://github.com/investec/home-run/issues/15)) ([c41f53d](https://github.com/investec/home-run/commit/c41f53d8f1a5bba0605e767ba6bb28cd1de22b0d)), closes [#000](https://github.com/investec/home-run/issues/000)
+
 ## [0.2.1](https://github.com/investec/home-run/compare/0.2.0...0.2.1) (2024-11-19)
 
 ### Bug Fixes
