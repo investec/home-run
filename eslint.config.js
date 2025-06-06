@@ -44,6 +44,7 @@ export default tseslint.config(
           allowDefaultProject: ["*.*s", "eslint.config.js"],
           defaultProject: "./tsconfig.json",
         },
+        // eslint-disable-next-line n/no-unsupported-features/node-builtins
         tsconfigRootDir: import.meta.dirname,
       },
     },
