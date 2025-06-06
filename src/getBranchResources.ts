@@ -66,7 +66,11 @@ export async function getBranchResources({
   const branchResourcesArray: GenericResourceExpanded[] = [];
   for await (const branchResource of branchResources) {
     if (
+      // Azure SDK types don't match runtime reality - tags can be undefined
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       branchResource.tags?.Branch?.endsWith(branchName) ||
+      // Azure SDK types don't match runtime reality - tags can be undefined
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       branchResource.tags?.branch?.endsWith(branchName)
     ) {
       branchResourcesArray.push(branchResource);
