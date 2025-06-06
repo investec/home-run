@@ -1,6 +1,6 @@
 {
   "name": "@investec/home-run",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Configure local development environments for Azure apps with one command",
   "repository": {
     "type": "git",

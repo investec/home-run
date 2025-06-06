@@ -1,3 +1,9 @@
+## [0.2.3](https://github.com/investec/home-run/compare/0.2.2...0.2.3) (2025-06-06)
+
+### Bug Fixes
+
+- branch tag case ([#22](https://github.com/investec/home-run/issues/22)) ([774079f](https://github.com/investec/home-run/commit/774079fd7f7d0dd7d551419127a07611b3ad510c)), closes [#21](https://github.com/investec/home-run/issues/21)
+
 ## [0.2.2](https://github.com/investec/home-run/compare/0.2.1...0.2.2) (2025-02-13)
 
 ### Bug Fixes
